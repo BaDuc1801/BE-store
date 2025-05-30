@@ -33,9 +33,6 @@ const itemController = {
                 filter.type = filterData;
             }
 
-            // Đếm tổng items thỏa filter
-            const totalItems = await itemModel.countDocuments(filter);
-
             // Build sort object
             let sort = {};
             sort[sortBy] = sortOrder;
@@ -45,7 +42,7 @@ const itemController = {
                 .skip(skip)
                 .limit(parseInt(pageSize) || 12);
 
-            res.status(200).json({ totalItems, items });
+            res.status(200).json(items);
         } catch (error) {
             console.error('Error fetching items:', error);
             res.status(500).send({ error: 'Internal Server Error' });
