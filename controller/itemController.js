@@ -9,42 +9,43 @@ cloudinary.config(getCloudinaryConfig);
 
 const itemController = {
     getAllItems: async (req, res) => {
-        const { currentPage, pageSize, sortBy, sortType, searchValue, filterData = '' } = req.query;
-        const skip = (parseInt(pageSize) || 12) * (parseInt(currentPage) - 1);
-        const sortOrder = parseInt(sortType) || -1;
-
         try {
-            const searchCondition = {
-                ...(searchValue ? { itemName: new RegExp(searchValue, 'i') } : {}),
-                ...(filterData ? { type: filterData } : {})
-            };
-            const totalItems = await itemModel.countDocuments(searchCondition);
+            const {
+                currentPage = 1,
+                pageSize = 12,
+                sortBy = 'price',
+                sortType = '-1',
+                searchValue = '',
+                filterData = ''
+            } = req.query;
 
-            const items = await itemModel.aggregate([
-                {
-                    $addFields: {
-                        priceNum: { $toDouble: "$price" }
-                    }
-                },
-                {
-                    $match: searchCondition
-                },
-                {
-                    $sort: { [sortBy]: sortOrder }
-                },
-                {
-                    $skip: skip
-                },
-                {
-                    $limit: parseInt(pageSize) || 12
-                }
-            ]);
+            const skip = (parseInt(pageSize) || 12) * (parseInt(currentPage) - 1);
+            const sortOrder = parseInt(sortType) || -1;
 
-            const data = {
-                totalItems,
-                items
-            };
-            res.status(200).send(data);
+            // Build filter object
+            let filter = {};
+            if (searchValue) {
+                // Tìm kiếm itemName chứa searchValue (không phân biệt hoa thường)
+                filter.itemName = { $regex: searchValue, $options: 'i' };
+            }
+            if (filterData) {
+                // Giả sử filterData dùng để lọc theo trường 'type'
+                filter.type = filterData;
+            }
+
+            // Đếm tổng items thỏa filter
+            const totalItems = await itemModel.countDocuments(filter);
+
+            // Build sort object
+            let sort = {};
+            sort[sortBy] = sortOrder;
+
+            const items = await itemModel.find(filter)
+                .sort(sort)
+                .skip(skip)
+                .limit(parseInt(pageSize) || 12);
+
+            res.status(200).json({ totalItems, items });
         } catch (error) {
             console.error('Error fetching items:', error);
             res.status(500).send({ error: 'Internal Server Error' });
