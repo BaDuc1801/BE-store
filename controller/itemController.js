@@ -37,14 +37,23 @@ const itemController = {
             let sort = {};
             sort[sortBy] = sortOrder;
 
-            if (sortBy === 'price') {
-                sort['price'] = sortOrder === 1 ? 1 : -1;
-            }
-
             const items = await itemModel.find(filter)
                 .sort(sort)
                 .skip(skip)
                 .limit(parseInt(pageSize) || 12);
+
+            if (sortBy === 'price') {
+                items.sort((a, b) => {
+                    const priceA = parseFloat(a.price);
+                    const priceB = parseFloat(b.price);
+
+                    if (sortOrder === 1) {
+                        return priceA - priceB; // Tăng dần
+                    } else {
+                        return priceB - priceA; // Giảm dần
+                    }
+                });
+            }
 
             res.status(200).json(items);
         } catch (error) {
