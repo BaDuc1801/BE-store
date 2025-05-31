@@ -54,7 +54,7 @@ const itemController = {
                     }
                 });
             }
-            const totalItems = await itemModel.countDocuments();
+            const totalItems = await itemModel.countDocuments(filter);
 
             res.status(200).json({ items, totalItems });
         } catch (error) {
