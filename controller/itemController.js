@@ -54,8 +54,9 @@ const itemController = {
                     }
                 });
             }
+            const totalItems = await itemModel.countDocuments();
 
-            res.status(200).json(items);
+            res.status(200).json({ items, totalItems });
         } catch (error) {
             console.error('Error fetching items:', error);
             res.status(500).send({ error: 'Internal Server Error' });
