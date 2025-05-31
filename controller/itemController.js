@@ -37,6 +37,10 @@ const itemController = {
             let sort = {};
             sort[sortBy] = sortOrder;
 
+            if (sortBy === 'price') {
+                sort['price'] = sortOrder === 1 ? 1 : -1;
+            }
+
             const items = await itemModel.find(filter)
                 .sort(sort)
                 .skip(skip)
