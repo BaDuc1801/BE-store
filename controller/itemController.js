@@ -32,28 +32,31 @@ const itemController = {
                 // Giả sử filterData dùng để lọc theo trường 'type'
                 filter.type = filterData;
             }
-
-            // Build sort object
             let sort = {};
             sort[sortBy] = sortOrder;
 
-            const items = await itemModel.find(filter)
-                .sort(sort)
-                .skip(skip)
-                .limit(parseInt(pageSize) || 12);
-
-            if (sortBy === 'price') {
-                items.sort((a, b) => {
-                    const priceA = parseFloat(a.price);
-                    const priceB = parseFloat(b.price);
-
-                    if (sortOrder === 1) {
-                        return priceA - priceB; // Tăng dần
-                    } else {
-                        return priceB - priceA; // Giảm dần
+            const items = await itemModel.aggregate([
+                {
+                    $match: filter  // Áp dụng filter trước
+                },
+                {
+                    $addFields: {
+                        priceAsNumber: { $toDouble: "$price" }  // Chuyển đổi 'price' từ string thành number
                     }
-                });
-            }
+                },
+                {
+                    $sort: {
+                        priceAsNumber: sortOrder  // Sắp xếp theo price sau khi đã chuyển đổi thành number
+                    }
+                },
+                {
+                    $skip: skip  // Phân trang
+                },
+                {
+                    $limit: parseInt(pageSize) || 12  // Giới hạn số lượng item
+                }
+            ]);
+
             const totalItems = await itemModel.countDocuments(filter);
 
             res.status(200).json({ items, totalItems });
