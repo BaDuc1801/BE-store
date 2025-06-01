@@ -66,6 +66,12 @@ const itemController = {
         }
     },
 
+    getItemById: async (req, res) => {
+        const itemId = req.params.id;
+        const rs = await itemModel.findById(itemId);
+        res.status(200).send(rs)
+    },
+
     postItem: async (req, res) => {
         const item = req.body;
         const rs = await itemModel.create(item);

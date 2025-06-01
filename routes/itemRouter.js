@@ -9,6 +9,7 @@ const upload = multer({
     storage: storage
 })
 itemRouter.get('/', itemController.getAllItems);
+itemRouter.get('/get-item/:id', itemController.getItemById);
 itemRouter.post('/', itemController.postItem);
 itemRouter.put('/update-item-img/:id', upload.array('img'), itemController.uploadImgItem);
 itemRouter.put('/update-item/:id', itemController.updateItem);
