@@ -153,7 +153,6 @@ const userController = {
         try {
             const user = await userModel.findById(userID);
             if (!user) throw new Error('User not found')
-            if (user.cart.includes(itemID)) throw new Error('Product already in cart');
             user.cart.push(itemID);
             await user.save();
             res.status(200).send({
