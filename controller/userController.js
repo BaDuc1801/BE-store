@@ -155,10 +155,7 @@ const userController = {
             if (!user) throw new Error('User not found')
             user.cart.push(itemID);
             await user.save();
-            res.status(200).send({
-                message: 'Product already in cart',
-                user
-            })
+            res.status(200).send(user.cart)
         } catch (error) {
             res.status(400).send({
                 message: error.message
