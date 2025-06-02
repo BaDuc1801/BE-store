@@ -151,10 +151,11 @@ const userController = {
         const userID = req.user.userId
         const { itemID } = req.body;
         try {
-            const user = await userModel.updateOne(
+            await userModel.updateOne(
                 { _id: userID },
                 { $push: { cart: itemID } }
             );
+            const user = await userModel.findById(userID).populate('cart');
             res.status(200).send(user.cart)
         } catch (error) {
             res.status(400).send({
