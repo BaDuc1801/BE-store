@@ -176,7 +176,7 @@ const userController = {
         } catch (error) {
             console.error('Error in addToCart:', error);
             res.status(400).send({
-                message: error.message,
+                // message: error.message,
                 itemID
             });
         }
