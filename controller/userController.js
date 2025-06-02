@@ -159,7 +159,7 @@ const userController = {
                 throw new Error('User not found');
             }
 
-        const itemIndex = user.cart.findIndex(item => item._id.toString() === itemID.toString());
+        const itemIndex = user.cart.findIndex(item => item.itemID.toString() === itemID);
 
             if (itemIndex > -1) {
                 // Nếu sản phẩm đã có trong giỏ, tăng số lượng
@@ -176,7 +176,8 @@ const userController = {
         } catch (error) {
             console.error('Error in addToCart:', error);
             res.status(400).send({
-                message: error.message
+                message: error.message,
+                itemID
             });
         }
     },
