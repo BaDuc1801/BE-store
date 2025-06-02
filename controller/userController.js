@@ -151,28 +151,20 @@ const userController = {
         const userID = req.user.userId;
         const { itemID } = req.body;
         try {
-            // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
             const user = await userModel.findById(userID);
 
             if (!user) {
                 throw new Error('User not found');
             }
 
-            // Kiểm tra xem itemID đã có trong cart chưa
-            const itemIndex = user.cart.findIndex(item => item.itemID.toString() === itemID);
+            const itemIndex = user.cart.findIndex(item => item.itemID === itemID);
 
             if (itemIndex > -1) {
-                // Nếu đã có, tăng quantity lên 1
                 user.cart[itemIndex].quantity += 1;
             } else {
-                // Nếu chưa có, thêm mới vào giỏ hàng với quantity = 1
                 user.cart.push({ itemID, quantity: 1 });
             }
-
-            // Lưu thay đổi
             await user.save();
-
-            // Trả về giỏ hàng đã cập nhật
             res.status(200).send(user.cart);
         } catch (error) {
             res.status(400).send({
