@@ -17,7 +17,7 @@ userRouter.post('/login' ,userController.login);
 userRouter.post('/refresh-token', userController.refreshAccessToken);
 userRouter.post('/forgot' ,userController.forgotPass);
 userRouter.post('/add-to-favourite', userMiddleware.verifyToken, userController.addToFavourite)
-userRouter.post('/add-to-cart', userMiddleware.verifyToken, userController.addToCart)
+userRouter.put('/add-to-cart', userMiddleware.verifyToken, userController.addToCart)
 userRouter.put('/update-user', userMiddleware.verifyToken, userController.updateUser)
 userRouter.put('/change-password', userMiddleware.verifyToken, userController.changePassword)
 userRouter.put('/reset-pass',userController.resetPass)

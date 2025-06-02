@@ -159,7 +159,10 @@ const userController = {
                 throw new Error('User not found');
             }
 
-        const itemIndex = user.cart.findIndex(item => item.itemID.toString() === itemID);
+            const itemIndex = user.cart.findIndex(item => {
+                item.itemID === itemID
+            }
+            );
 
             if (itemIndex > -1) {
                 user.cart[itemIndex].quantity += 1;
