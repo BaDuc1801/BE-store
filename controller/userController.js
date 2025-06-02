@@ -45,12 +45,12 @@ const userController = {
             const accessToken = jwt.sign({
                 userId: user._id,
                 role: user.role
-            }, process.env.SECRETKEY, { expiresIn: "10s" });
+            }, process.env.SECRETKEY, { expiresIn: "1h" });
 
             const refreshToken = jwt.sign({
                 userId: user._id,
                 role: user.role
-            }, process.env.SECRETKEY, { expiresIn: "10s" });
+            }, process.env.SECRETKEY, { expiresIn: "24h" });
 
             res.cookie('refresh_token', refreshToken, {
                 httpOnly: true,
