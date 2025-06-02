@@ -3,6 +3,7 @@ import bcrypt from "bcrypt"
 import jwt from 'jsonwebtoken'
 import { v2 as cloudinary } from 'cloudinary'
 import dotenv from 'dotenv';
+import mongoose from "mongoose";
 dotenv.config();
 
 const getCloudinaryConfig = JSON.parse(process.env.CLOUD_DINARY_CONFIG);
