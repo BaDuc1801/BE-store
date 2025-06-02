@@ -159,8 +159,7 @@ const userController = {
                 throw new Error('User not found');
             }
 
-            // Tìm xem sản phẩm đã có trong giỏ hàng hay chưa
-        const itemIndex = user.cart.findIndex(item => item.itemID.toString() === itemID.toString());
+        const itemIndex = user.cart.findIndex(item => item._id.toString() === itemID.toString());
 
             if (itemIndex > -1) {
                 // Nếu sản phẩm đã có trong giỏ, tăng số lượng
