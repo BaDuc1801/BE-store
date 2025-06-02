@@ -150,6 +150,7 @@ const userController = {
     addToCart: async (req, res) => {
         const userID = req.user.userId;
         const { itemID } = req.body;
+
         try {
             const user = await userModel.findById(userID);
 
@@ -157,16 +158,21 @@ const userController = {
                 throw new Error('User not found');
             }
 
-            const itemIndex = user.cart.findIndex(item => item.itemID === itemID);
+            const itemObjectId = mongoose.Types.ObjectId(itemID);
+
+            const itemIndex = user.cart.findIndex(item => item.itemID.toString() === itemObjectId.toString());
 
             if (itemIndex > -1) {
                 user.cart[itemIndex].quantity += 1;
             } else {
-                user.cart.push({ itemID, quantity: 1 });
+                user.cart.push({ itemID: itemObjectId, quantity: 1 });
             }
+
             await user.save();
             res.status(200).send(user.cart);
+
         } catch (error) {
+            console.error('Error in addToCart:', error);
             res.status(400).send({
                 message: error.message
             });
