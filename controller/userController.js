@@ -162,7 +162,6 @@ const userController = {
         const itemIndex = user.cart.findIndex(item => item.itemID.toString() === itemID);
 
             if (itemIndex > -1) {
-                // Nếu sản phẩm đã có trong giỏ, tăng số lượng
                 user.cart[itemIndex].quantity += 1;
             } else {
                 // Nếu sản phẩm chưa có, thêm mới vào giỏ
@@ -176,8 +175,7 @@ const userController = {
         } catch (error) {
             console.error('Error in addToCart:', error);
             res.status(400).send({
-                // message: error.message,
-                itemID
+                message: error.message,
             });
         }
     },
