@@ -45,12 +45,12 @@ const userController = {
             const accessToken = jwt.sign({
                 userId: user._id,
                 role: user.role
-            }, process.env.SECRETKEY, { expiresIn: "1h" });
+            }, process.env.SECRETKEY, { expiresIn: "10s" });
 
             const refreshToken = jwt.sign({
                 userId: user._id,
                 role: user.role
-            }, process.env.SECRETKEY, { expiresIn: "24h" });
+            }, process.env.SECRETKEY, { expiresIn: "10s" });
 
             res.cookie('refresh_token', refreshToken, {
                 httpOnly: true,
@@ -150,30 +150,32 @@ const userController = {
 
     addToCart: async (req, res) => {
         const userID = req.user.userId;
-        const { itemID } = req.body;
-
+        const { itemID, quantity } = req.body;
         try {
-            const user = await userModel.findById(userID);
-
-            if (!user) {
-                throw new Error('User not found');
-            }
-
-            const itemIndex = user.cart.findIndex(item => {
-                item.itemID === itemID
-            }
+            const user = await userModel.findOneAndUpdate(
+                {
+                    _id: userID,
+                    'cart.itemID': itemID
+                },
+                {
+                    $inc: { 'cart.$.quantity': quantity }
+                },
+                {
+                    new: true
+                }
             );
-
-            if (itemIndex > -1) {
-                user.cart[itemIndex].quantity += 1;
-            } else {
-                // Nếu sản phẩm chưa có, thêm mới vào giỏ
-                user.cart.push({ itemID: itemID, quantity: 1 });
+            if (!user) {
+                await userModel.findByIdAndUpdate(userID, {
+                    $push: {
+                        cart: {
+                            itemID,
+                            quantity
+                        }
+                    }
+                });
             }
-
-            // Lưu lại thay đổi vào cơ sở dữ liệu
-            await user.save();
-            res.status(200).send(user.cart);
+            const rs = await userModel.findById(userID).populate('cart');
+            return res.status(200).send(rs.cart);
 
         } catch (error) {
             console.error('Error in addToCart:', error);
