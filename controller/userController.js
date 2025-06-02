@@ -160,7 +160,7 @@ const userController = {
             }
 
             // Tìm xem sản phẩm đã có trong giỏ hàng hay chưa
-            const itemIndex = user.cart.findIndex(item => item.itemID === itemID);
+        const itemIndex = user.cart.findIndex(item => item.itemID.toString() === itemID.toString());
 
             if (itemIndex > -1) {
                 // Nếu sản phẩm đã có trong giỏ, tăng số lượng
