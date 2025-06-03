@@ -185,6 +185,39 @@ const userController = {
         }
     },
 
+    updateQuantity: async (req, res) => {
+        const userID = req.user.userId;
+        const { itemID, quantity } = req.body;
+
+        try {
+            const user = await userModel.findOneAndUpdate(
+                {
+                    _id: userID,
+                    'cart.itemID': itemID
+                },
+                {
+                    $set: { 'cart.$.quantity': quantity }
+                },
+                {
+                    new: true
+                }
+            ).populate('cart.itemID');
+
+            if (!user) {
+                return res.status(404).send({
+                    message: 'User or item not found'
+                });
+            }
+
+            res.status(200).send(user.cart);
+        } catch (error) {
+            console.error('Error in updateQuantity:', error);
+            res.status(500).send({
+                message: 'Internal server error'
+            });
+        }
+    },
+
     deleteFavourite: async (req, res) => {
         const userID = req.user.userId;
         const { itemID } = req.body;
