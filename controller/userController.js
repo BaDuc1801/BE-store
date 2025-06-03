@@ -185,33 +185,25 @@ const userController = {
         }
     },
 
-    updateQuantity: async (req, res) => {
+    updateCart: async (req, res) => {
         const userID = req.user.userId;
-        const { itemID, quantity } = req.body;
-
+        const cart = req.body;
         try {
-            const user = await userModel.findOneAndUpdate(
-                {
-                    _id: userID,
-                    'cart.itemID': itemID
-                },
-                {
-                    $set: { 'cart.$.quantity': quantity }
-                },
-                {
-                    new: true
-                }
+            const user = await userModel.findByIdAndUpdate(
+                userID,
+                { cart: cart },
+                { new: true }
             ).populate('cart.itemID');
 
             if (!user) {
                 return res.status(404).send({
-                    message: 'User or item not found'
+                    message: 'User not found'
                 });
             }
 
             res.status(200).send(user.cart);
         } catch (error) {
-            console.error('Error in updateQuantity:', error);
+            console.error('Error in updateCart:', error);
             res.status(500).send({
                 message: 'Internal server error'
             });
