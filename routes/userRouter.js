@@ -23,5 +23,6 @@ userRouter.put('/change-password', userMiddleware.verifyToken, userController.ch
 userRouter.put('/reset-pass',userController.resetPass)
 userRouter.delete('/delete-favourite', userMiddleware.verifyToken, userController.deleteFavourite)
 userRouter.put('/delete-cart', userMiddleware.verifyToken, userController.deleteCart)
+userRouter.put('/update-quantity', userMiddleware.verifyToken, userController.updateQuantity)
 
 export default userRouter
