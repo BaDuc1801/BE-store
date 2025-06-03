@@ -221,38 +221,39 @@ const userController = {
 
 
     deleteCart: async (req, res) => {
-        const userID = req.user.userId;
-        const { itemID } = req.body;
+        const userID = req.user.userId; // Lấy userID từ JWT hoặc session
+        const { itemID } = req.body; // itemID muốn xóa khỏi giỏ hàng
 
         try {
-            const user = await userModel.findById(userID);
+            // Tìm và xóa itemID khỏi giỏ hàng của người dùng
+            const user = await userModel.findByIdAndUpdate(
+                userID,
+                {
+                    $pull: {
+                        cart: { itemID } // Sử dụng toán tử $pull để xóa phần tử có itemID
+                    }
+                },
+                { new: true } // Trả về user đã được cập nhật
+            ).populate('cart.itemID');
+
+            // Kiểm tra xem có xóa thành công không
             if (!user) {
                 return res.status(404).send({
-                    message: 'User not found'
-                });
-            }
-            const itemIndex = user.cart.findIndex(fav => fav._id.toString() === itemID);
-
-            if (itemIndex === -1) {
-                return res.status(400).send({
-                    message: 'Item not found in cart'
+                    message: 'User not found or cart is empty.'
                 });
             }
 
-            user.cart.splice(itemIndex, 1);
-            await user.save();
+            // Trả về giỏ hàng sau khi đã xóa item
+            return res.status(200).send(user.cart);
 
-            res.status(200).send({
-                message: 'Item removed from favourites successfully',
-                data: user
-            });
         } catch (error) {
-            console.error('Error in deleteFavourite:', error);
-            res.status(500).send({
-                message: 'Internal server error'
+            console.error('Error in removeFromCart:', error);
+            res.status(400).send({
+                message: error.message,
             });
         }
     },
+
 
     uploadAvatar: async (req, res) => {
         let avatar = req.file;
