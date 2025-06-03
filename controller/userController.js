@@ -11,7 +11,7 @@ cloudinary.config(getCloudinaryConfig);
 
 const userController = {
     getUsers: async (req, res) => {
-        const listUser = await userModel.find().populate('favourites').populate('cart');
+        const listUser = await userModel.find().populate('favourites').populate('cart.itemID');
         res.status(200).send(listUser)
     },
 
@@ -333,7 +333,7 @@ const userController = {
 
     getUserById: async (req, res) => {
         const userId = req.user.userId;
-        const user = await userModel.findById(userId).populate('favourites').populate('cart');
+        const user = await userModel.findById(userId).populate('favourites').populate('cart.itemID');
         res.status(200).send(user)
     }
 
