@@ -174,7 +174,7 @@ const userController = {
                     }
                 });
             }
-            const rs = await userModel.findById(userID).populate('cart');
+            const rs = await userModel.findById(userID).populate('cart.itemID');
             return res.status(200).send(rs.cart);
 
         } catch (error) {
