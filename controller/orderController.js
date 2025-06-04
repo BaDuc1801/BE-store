@@ -7,7 +7,7 @@ const orderController = {
             const userID = req.user.userId;
             const data = req.body;
 
-            const newOrder = await orderModel.create({
+            await orderModel.create({
                 ...data,
                 status: 'pending',
                 userID: userID,
@@ -15,7 +15,7 @@ const orderController = {
 
             const orderedItemIDs = data.orders.map(order => order.itemID);
 
-            await userModel.updateOne(
+            const user = await userModel.updateOne(
                 { _id: userID },
                 {
                     $pull: {
@@ -23,12 +23,14 @@ const orderController = {
                             itemID: { $in: orderedItemIDs }
                         }
                     }
+                },
+                {
+                    new: true
                 }
             );
 
-            return res.status(200).send(newOrder);
+            return res.status(200).send(user);
         } catch (error) {
-            console.error('Order failed:', error);
             return res.status(500).send({ message: 'Order failed', error });
         }
     },
