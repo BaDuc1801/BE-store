@@ -3,7 +3,6 @@ import bcrypt from "bcrypt"
 import jwt from 'jsonwebtoken'
 import { v2 as cloudinary } from 'cloudinary'
 import dotenv from 'dotenv';
-import mongoose from "mongoose";
 dotenv.config();
 
 const getCloudinaryConfig = JSON.parse(process.env.CLOUD_DINARY_CONFIG);
@@ -304,7 +303,7 @@ const userController = {
 
     getUserById: async (req, res) => {
         const userId = req.user.userId;
-        const user = await userModel.findById(userId).populate('favourites').populate('cart.itemID');
+        const user = await userModel.findById(userId).populate('cart.itemID');
         res.status(200).send(user)
     }
 
