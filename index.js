@@ -4,6 +4,7 @@ import cors from 'cors'
 import itemRouter from './routes/itemRouter.js';
 import userRouter from './routes/userRouter.js';
 import cookieParser from 'cookie-parser';
+import orderRouter from './routes/orderRouter.js';
 
 await mongoose.connect('mongodb+srv://minhduc180104:minhduc180104@learnmongo.zli6q.mongodb.net/store?retryWrites=true&w=majority&appName=LearnMongo')
 
