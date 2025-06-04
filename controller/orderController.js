@@ -1,4 +1,4 @@
-import orderModel from "../model/orders.schema";
+import orderModel from "../model/orders.schema.js";
 
 const orderController = {
     postOrder: async (req, res) => {
