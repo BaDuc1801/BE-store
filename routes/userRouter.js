@@ -16,12 +16,10 @@ userRouter.put('/up-avatar', upload.single('avatar'), userController.uploadAvata
 userRouter.post('/login' ,userController.login);
 userRouter.post('/refresh-token', userController.refreshAccessToken);
 userRouter.post('/forgot' ,userController.forgotPass);
-userRouter.post('/add-to-favourite', userMiddleware.verifyToken, userController.addToFavourite)
 userRouter.put('/add-to-cart', userMiddleware.verifyToken, userController.addToCart)
 userRouter.put('/update-user', userMiddleware.verifyToken, userController.updateUser)
 userRouter.put('/change-password', userMiddleware.verifyToken, userController.changePassword)
 userRouter.put('/reset-pass',userController.resetPass)
-userRouter.delete('/delete-favourite', userMiddleware.verifyToken, userController.deleteFavourite)
 userRouter.put('/delete-cart', userMiddleware.verifyToken, userController.deleteCart)
 userRouter.put('/update-cart', userMiddleware.verifyToken, userController.updateCart)
 

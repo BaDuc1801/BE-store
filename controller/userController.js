@@ -128,26 +128,6 @@ const userController = {
         }
     },
 
-    addToFavourite: async (req, res) => {
-        const userID = req.user.userId
-        const { itemID } = req.body;
-        try {
-            const user = await userModel.findById(userID);
-            if (!user) throw new Error('User not found')
-            if (user.favourites.includes(itemID)) throw new Error('Product already in cart');
-            user.favourites.push(itemID);
-            await user.save();
-            res.status(200).send({
-                message: 'Product already in favourite',
-                data: user
-            })
-        } catch (error) {
-            res.status(400).send({
-                message: error.message
-            })
-        }
-    },
-
     addToCart: async (req, res) => {
         const userID = req.user.userId;
         const { itemID, quantity } = req.body;
@@ -209,41 +189,6 @@ const userController = {
             });
         }
     },
-
-    deleteFavourite: async (req, res) => {
-        const userID = req.user.userId;
-        const { itemID } = req.body;
-
-        try {
-            const user = await userModel.findById(userID);
-            if (!user) {
-                return res.status(404).send({
-                    message: 'User not found'
-                });
-            }
-            const itemIndex = user.favourites.findIndex(fav => fav._id.toString() === itemID);
-
-            if (itemIndex === -1) {
-                return res.status(400).send({
-                    message: 'Item not found in favourites'
-                });
-            }
-
-            user.favourites.splice(itemIndex, 1);
-            await user.save();
-
-            res.status(200).send({
-                message: 'Item removed from favourites successfully',
-                data: user
-            });
-        } catch (error) {
-            console.error('Error in deleteFavourite:', error);
-            res.status(500).send({
-                message: 'Internal server error'
-            });
-        }
-    },
-
 
     deleteCart: async (req, res) => {
         const userID = req.user.userId; // Lấy userID từ JWT hoặc session

@@ -20,6 +20,7 @@ app.use(cookieParser());
 
 app.use('/items', itemRouter)
 app.use('/users', userRouter)
+app.use('/orders', orderRouter)
 
 app.get("/", (req, res) => {
     res.status(200).json({ message: "hello!" });
