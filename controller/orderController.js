@@ -46,7 +46,7 @@ const orderController = {
 
     findOrderByStatus: async (req, res) => {
         const userID = req.user.userId;
-        const status = req.body;
+        const status = req.params.status;
         const rs = await orderModel.find({
             userID: userID,
             status: status,
