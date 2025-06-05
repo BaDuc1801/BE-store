@@ -40,7 +40,7 @@ const orderController = {
         const userID = req.user.userId;
         const rs = await orderModel.find({
             userID: userID
-        }).populate('orders.itemID')
+        }).populate('orders.itemID').sort({ createdAt: -1 })
         return res.status(200).send(rs)
     },
 
@@ -50,7 +50,7 @@ const orderController = {
         const rs = await orderModel.find({
             userID: userID,
             status: status,
-        }).populate('orders.itemID')
+        }).populate('orders.itemID').sort({ createdAt: -1 })
         return res.status(200).send(rs)
     }
 }
