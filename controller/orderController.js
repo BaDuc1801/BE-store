@@ -42,6 +42,16 @@ const orderController = {
             userID: userID
         })
         return res.status(200).send(rs)
+    },
+
+    findOrderByStatus: async (req, res) => {
+        const userID = req.user.userId;
+        const status = req.body;
+        const rs = await orderModel.find({
+            userID: userID,
+            status: status,
+        })
+        return res.status(200).send(rs)
     }
 }
 
