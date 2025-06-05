@@ -9,7 +9,7 @@ const orderController = {
 
             await orderModel.create({
                 ...data,
-                status: 'pending',
+                status: 'Pending',
                 userID: userID,
             });
 
