@@ -266,7 +266,9 @@ const userController = {
         let rs = await userModel.findByIdAndUpdate(
             userId,
             user
-        )
+            , {
+                new: true
+            })
         res.status(200).send(rs)
     },
 
