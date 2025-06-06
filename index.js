@@ -9,7 +9,7 @@ import orderRouter from './routes/orderRouter.js';
 await mongoose.connect('mongodb+srv://minhduc180104:minhduc180104@learnmongo.zli6q.mongodb.net/store?retryWrites=true&w=majority&appName=LearnMongo')
 
 const corsOptions = {
-    origin: 'https://my-vue-store.vercel.app/',  
+    origin: 'https://my-vue-store.vercel.app',  
     methods: ['GET', 'POST', 'PUT', 'DELETE'],  
     credentials: true, 
 };
