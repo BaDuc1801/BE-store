@@ -227,7 +227,7 @@ const userController = {
     uploadAvatar: async (req, res) => {
         let avatar = req.file;
         const userID = req.user.userId;
-        let user = await userModel.find(userID);
+        let user = await userModel.findById(userID);
         if (user) {
             if (avatar) {
                 const dataUrl = `data:${avatar.mimetype};base64,${avatar.buffer.toString('base64')}`;
