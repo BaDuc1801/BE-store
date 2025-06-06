@@ -12,7 +12,7 @@ const upload = multer({
 userRouter.get('/', userController.getUsers);
 userRouter.get('/get-user', userMiddleware.verifyToken, userController.getUserById)
 userRouter.post('/register', userMiddleware.checkValidUser ,userController.register);
-userRouter.put('/up-avatar', upload.single('avatar'), userController.uploadAvatar);
+userRouter.put('/up-avatar',userMiddleware.verifyToken, upload.single('avatar'), userController.uploadAvatar);
 userRouter.post('/login' ,userController.login);
 userRouter.post('/refresh-token', userController.refreshAccessToken);
 userRouter.post('/forgot' ,userController.forgotPass);
